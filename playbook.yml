@@ -1,0 +1,19 @@
+---
+- name: Deploy BMS Application to EKS
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Update kubeconfig for EKS cluster
+      shell: aws eks update-kubeconfig --region us-east-1 --name Rahul
+
+    - name: Apply Kubernetes Deployment
+      shell: kubectl apply -f k8s/deployment.yaml
+
+    - name: Apply Kubernetes Service
+      shell: kubectl apply -f k8s/service.yaml
+
+    - name: Wait for rollout to complete
+      shell: kubectl rollout status deployment/bms-app
